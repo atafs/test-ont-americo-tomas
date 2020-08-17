@@ -1,21 +1,28 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import ListOfBooks from './components/ListOfBooks';
+
 import './App.scss';
 
-function App() {
+const App = () => {
+  const [userBooks, setUserBooks] = useState([]);
+
+  const url = 'http://nyx.vima.ekt.gr:3000/api/books';
+
+  useEffect(() => {
+    fetch(url, {
+      method: 'POST'
+    })
+      .then(response => response.json())
+      .then(responseData => {
+        const {books} = responseData;
+        setUserBooks(books);
+      })
+    }, []);
+
   return (
     <div className="App">
       <header className="App-header">
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <ListOfBooks books={userBooks} />
       </header>
     </div>
   );
